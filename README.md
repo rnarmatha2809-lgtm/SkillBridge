@@ -1,44 +1,54 @@
-# MERN
+# SkillBridge – Youth Employability Platform
 
-This is a simple NodeJS + Express + React + MongoDB application. This application serves as a basic template for a mern applications.
+## Project Overview
 
-What does this application do?
--------------------------------
-This application serves a simple MERN based TODO application to demonstrate the use of MERN stack. This application uses following technologies:
-- MongoDB: used as database
-- Express: used as web application framework
-- React: used as frontend framework to build UI
-- NodeJS: used as backend server
+SkillBridge is a MERN Stack-based youth employability platform designed to help students improve their skills and career opportunities.
 
+## Technologies Used
 
-## How to run
+* React.js
+* Node.js
+* Express.js
+* MongoDB
+* JavaScript
+* CSS
 
-Before running the application, make sure all dependencies are installed. 
+## Features
 
-1. Install server & client dependencies, run following command in terminal:
-   > `npm install; cd client && npm install && cd ..`
+* Student Dashboard
+* Profile and Skills Management
+* Skill Assessment
+* Skill Gap Analysis
+* Course Recommendations
+* Job Listings
+* Application Tracking
+* Resume Builder
+* Admin Dashboard
 
-2. Run following command to start both server and client:
-   > `npm run dev`
+## Project Structure
 
-3. Refresh the URL in simple browser to see the output.
+* `client/` – React frontend
+* `models/` – MongoDB models
+* `routes/` – Backend API routes
+* `index.js` – Express backend server
 
+## How to Run
 
+### Backend
 
-## FAQs & Debugging
+```bash
+npm install
+npm start
+```
 
-### 1. Node server failing to connect to Database
+### Frontend
 
-   Ensure Mongo_DB_URI is set in .env file. If not, create a new file named `.env` in root directory and add following line:
-   > `MONGO_DB_URI=<YOUR_MONGO_DB_URI>`
+```bash
+cd client
+npm install
+npm run dev
+```
 
-   Once the studio is connected to your workspace, `MONGO_DB_URI` should be automatically set in your `.env` file.
+## Project Repository
 
-   Alternatively, you can create `MONGO_DB_URI` using value present in the file **.vscode/.studio/studio-env.json**.
-   MONGO_DB_URI typically looks like this:
-> `mongodb://<USERNAME>:<PASSWORD>@<HOST>:<PORT>/<DATABASE_NAME>`
-
-### 2. Can I start server and client separately?   
-   `npm run dev` starts both server and client. If you want to start them separately, you can use following commands:
-   - `npm run server`: to start server
-   - `npm run client`: to start client
+GitHub: https://github.com/rnarmatha2809-lgtm/SkillBridge
