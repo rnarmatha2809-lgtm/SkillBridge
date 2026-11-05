@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 function CourseRecommendations({ student, onBack }) {
 
-    const skills = student?.skills || [];
+    // Get student skills safely
+    const skills = Array.isArray(student?.skills)
+        ? student.skills
+        : [];
 
+    // Available courses
     const courseData = [
         {
             skill: 'React',
@@ -37,22 +41,29 @@ function CourseRecommendations({ student, onBack }) {
         }
     ];
 
-    const recommendations = courseData.filter(course =>
-        !skills.some(skill =>
-            skill.toLowerCase() === course.skill.toLowerCase()
-        )
-    );
+    // Find courses for skills the student has not learned
+    const recommendations = useMemo(() => {
+
+        const studentSkills = new Set(
+            skills
+                .filter(skill => typeof skill === 'string')
+                .map(skill => skill.trim().toLowerCase())
+        );
+
+        return courseData.filter(course =>
+            !studentSkills.has(course.skill.toLowerCase())
+        );
+
+    }, [skills]);
 
     return (
-
         <div style={styles.page}>
 
             <div style={styles.container}>
 
-                {/* BACK TO DASHBOARD BUTTON */}
-
                 <button
                     onClick={onBack}
+                    type="button"
                     style={styles.backButton}
                 >
                     ← Back to Dashboard
@@ -68,16 +79,22 @@ function CourseRecommendations({ student, onBack }) {
 
                 {recommendations.length === 0 ? (
 
-                    <p>No new recommendations available right now.</p>
+                    <div style={styles.empty}>
+                        <h3>Great Job!</h3>
+                        <p>
+                            No new recommendations available right now.
+                            Keep improving your existing skills!
+                        </p>
+                    </div>
 
                 ) : (
 
                     <div>
 
-                        {recommendations.map((course, index) => (
+                        {recommendations.map((course) => (
 
                             <div
-                                key={index}
+                                key={course.skill}
                                 style={styles.courseCard}
                             >
 
@@ -86,13 +103,14 @@ function CourseRecommendations({ student, onBack }) {
                                 <p>{course.description}</p>
 
                                 <p>
-                                    Related skill: <strong>{course.skill}</strong>
+                                    Related skill:{' '}
+                                    <strong>{course.skill}</strong>
                                 </p>
 
                                 <a
                                     href={course.link}
                                     target="_blank"
-                                    rel="noreferrer"
+                                    rel="noopener noreferrer"
                                     style={styles.link}
                                 >
                                     Explore Course →
@@ -109,14 +127,10 @@ function CourseRecommendations({ student, onBack }) {
             </div>
 
         </div>
-
     );
 }
 
-// ==========================================
-// STYLES
-// ==========================================
-
+// Styles
 const styles = {
 
     page: {
@@ -164,6 +178,13 @@ const styles = {
         color: '#2563eb',
         fontWeight: 'bold',
         textDecoration: 'none'
+    },
+
+    empty: {
+        background: 'white',
+        padding: '25px',
+        borderRadius: '10px',
+        textAlign: 'center'
     }
 
 };
