@@ -11,10 +11,8 @@ import SkillAssessment from './components/SkillAssessment';
 import SkillGapAnalysis from './components/SkillGapAnalysis';
 import ResumeBuilder from './components/ResumeBuilder';
 
-// API URL for the workspace proxy or local development
-const API_BASE = window.location.pathname.startsWith('/proxy/5000')
-  ? '/proxy/5000/api'
-  : '/api';
+// Render Backend API URL
+const API_BASE = 'https://skillbridge-backend-skw3.onrender.com/api';
 
 function App() {
   const [page, setPage] = useState(() => {
