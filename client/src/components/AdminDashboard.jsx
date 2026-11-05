@@ -1,5 +1,7 @@
-
 import React, { useEffect, useState } from 'react';
+
+// Render Backend API URL
+const API_BASE = 'https://skillbridge-backend-skw3.onrender.com/api';
 
 function AdminDashboard({ admin, onLogout }) {
     const [jobs, setJobs] = useState([]);
@@ -30,7 +32,7 @@ function AdminDashboard({ admin, onLogout }) {
     // Fetch all opportunities
     const fetchJobs = async () => {
         try {
-            const response = await fetch('/api/jobs', {
+            const response = await fetch(`${API_BASE}/jobs`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -39,7 +41,7 @@ function AdminDashboard({ admin, onLogout }) {
             const data = await response.json();
 
             if (response.ok) {
-                setJobs(data);
+                setJobs(Array.isArray(data) ? data : data.jobs || []);
             } else {
                 setMessage(data.message || 'Unable to load opportunities');
             }
@@ -53,7 +55,7 @@ function AdminDashboard({ admin, onLogout }) {
         setLoadingApplications(true);
 
         try {
-            const response = await fetch('/api/applications', {
+            const response = await fetch(`${API_BASE}/applications`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -80,7 +82,7 @@ function AdminDashboard({ admin, onLogout }) {
 
         try {
             const response = await fetch(
-                `/api/applications/${applicationId}/status`,
+                `${API_BASE}/applications/${applicationId}/status`,
                 {
                     method: 'PUT',
                     headers: {
@@ -118,7 +120,7 @@ function AdminDashboard({ admin, onLogout }) {
         e.preventDefault();
 
         try {
-            const response = await fetch('/api/jobs', {
+            const response = await fetch(`${API_BASE}/jobs`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -166,7 +168,7 @@ function AdminDashboard({ admin, onLogout }) {
         }
 
         try {
-            const response = await fetch(`/api/jobs/${id}`, {
+            const response = await fetch(`${API_BASE}/jobs/${id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -194,6 +196,7 @@ function AdminDashboard({ admin, onLogout }) {
 
     return (
         <div style={styles.container}>
+
             <header style={styles.header}>
                 <div>
                     <h1>SkillBridge Admin</h1>
@@ -382,7 +385,10 @@ function AdminDashboard({ admin, onLogout }) {
                 ) : applications.length === 0 ? (
                     <div style={styles.emptyState}>
                         <h3>No Applications Yet</h3>
-                        <p>Student applications will appear here when students apply for opportunities.</p>
+                        <p>
+                            Student applications will appear here when students
+                            apply for opportunities.
+                        </p>
                     </div>
                 ) : (
                     <div style={styles.applicationList}>
