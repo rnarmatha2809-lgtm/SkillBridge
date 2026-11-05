@@ -1,5 +1,7 @@
-
 import React, { useEffect, useState } from 'react';
+
+// Render Backend API URL
+const API_BASE = 'https://skillbridge-backend-skw3.onrender.com/api';
 
 function ProfileSkills({ onBack }) {
 
@@ -43,7 +45,7 @@ function ProfileSkills({ onBack }) {
         }
 
         try {
-            const response = await fetch('/api/profile', {
+            const response = await fetch(`${API_BASE}/profile`, {
                 method: 'GET',
                 headers: getHeaders()
             });
@@ -86,7 +88,7 @@ function ProfileSkills({ onBack }) {
         setMessage('');
 
         try {
-            const response = await fetch('/api/profile', {
+            const response = await fetch(`${API_BASE}/profile`, {
                 method: 'PUT',
                 headers: getHeaders(true),
                 body: JSON.stringify({
@@ -138,7 +140,7 @@ function ProfileSkills({ onBack }) {
         }
 
         try {
-            const response = await fetch('/api/skills', {
+            const response = await fetch(`${API_BASE}/skills`, {
                 method: 'POST',
                 headers: getHeaders(true),
                 body: JSON.stringify({ skill })
@@ -167,7 +169,7 @@ function ProfileSkills({ onBack }) {
     const removeSkill = async (skill) => {
         try {
             const response = await fetch(
-                `/api/skills/${encodeURIComponent(skill)}`,
+                `${API_BASE}/skills/${encodeURIComponent(skill)}`,
                 {
                     method: 'DELETE',
                     headers: getHeaders()
