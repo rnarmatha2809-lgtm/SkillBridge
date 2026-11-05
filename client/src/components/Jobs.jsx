@@ -1,5 +1,7 @@
-
 import React, { useEffect, useState } from 'react';
+
+// Render Backend API URL
+const API_BASE = 'https://skillbridge-backend-skw3.onrender.com/api';
 
 function Jobs({ onBack }) {
     const [jobs, setJobs] = useState([]);
@@ -18,7 +20,7 @@ function Jobs({ onBack }) {
     // Fetch jobs from MongoDB
     const fetchJobs = async () => {
         try {
-            const response = await fetch('/api/jobs', {
+            const response = await fetch(`${API_BASE}/jobs`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -27,7 +29,7 @@ function Jobs({ onBack }) {
             const data = await response.json();
 
             if (response.ok) {
-                setJobs(data);
+                setJobs(Array.isArray(data) ? data : data.jobs || []);
             } else {
                 setMessage(data.message || 'Unable to fetch opportunities');
             }
@@ -41,7 +43,7 @@ function Jobs({ onBack }) {
     // Fetch applications already submitted by this student
     const fetchMyApplications = async () => {
         try {
-            const response = await fetch('/api/applications/my', {
+            const response = await fetch(`${API_BASE}/applications/my`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -49,8 +51,10 @@ function Jobs({ onBack }) {
 
             const data = await response.json();
 
-            if (response.ok) {
-                setAppliedJobs(data.map(application => application.job?._id));
+            if (response.ok && Array.isArray(data)) {
+                setAppliedJobs(
+                    data.map(application => application.job?._id)
+                );
             }
         } catch (error) {
             console.error('Unable to fetch applications:', error);
@@ -63,7 +67,7 @@ function Jobs({ onBack }) {
         setMessage('');
 
         try {
-            const response = await fetch('/api/applications', {
+            const response = await fetch(`${API_BASE}/applications`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -93,6 +97,7 @@ function Jobs({ onBack }) {
             <button
                 onClick={onBack}
                 style={styles.backButton}
+                type="button"
             >
                 ← Back to Dashboard
             </button>
@@ -148,7 +153,9 @@ function Jobs({ onBack }) {
 
                             <p>
                                 <strong>Last Date:</strong>{' '}
-                                {new Date(job.lastDate).toLocaleDateString()}
+                                {job.lastDate
+                                    ? new Date(job.lastDate).toLocaleDateString()
+                                    : 'Not specified'}
                             </p>
 
                             <button
